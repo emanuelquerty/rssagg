@@ -15,6 +15,7 @@ import (
 
 	"github.com/emanuelquerty/rssagg/internal/database"
 	"github.com/emanuelquerty/rssagg/internal/routers"
+	"github.com/emanuelquerty/rssagg/internal/services"
 )
 
 func main() {
@@ -32,6 +33,11 @@ func main() {
 	}
 
 	dbConn := database.Config(dbURL)
+
+	// Long Running job
+	serviceContext := services.NewServiceContext(*logger, dbConn)
+	go serviceContext.StartScraping(10, time.Minute)
+
 	router := chi.NewRouter()
 
 	router.Use(cors.Handler(cors.Options{
