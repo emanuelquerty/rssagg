@@ -39,5 +39,7 @@ func (v1r *v1Router) Route() *chi.Mux {
 	v1r.router.Get("/feed_follows", handlerContext.MiddlewareAuth(handlerContext.GetFeedFollows))
 	v1r.router.Delete("/feed_follows/{feedFollowID}", handlerContext.MiddlewareAuth(handlerContext.DeleteFeedFollows))
 
+	v1r.router.Get("/posts", handlerContext.MiddlewareAuth(handlerContext.GetPosts))
+
 	return v1r.router
 }
