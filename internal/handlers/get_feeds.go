@@ -10,6 +10,7 @@ import (
 func (hctx *HandlerContext) GetFeeds(w http.ResponseWriter, r *http.Request) {
 	feeds, err := services.GetFeeds(r.Context(), hctx.DBConn)
 	if err != nil {
+		hctx.Logger.Println(err)
 		utils.RespondWithError(w, 500, "No feeds found")
 		return
 	}

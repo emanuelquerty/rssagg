@@ -2,8 +2,12 @@ package services
 
 import (
 	"context"
+	"database/sql"
+	"strings"
 	"sync"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 func (sctx *ServiceContext) StartScraping(concurrency int, timeBetweenRequest time.Duration) {
@@ -36,13 +40,42 @@ func (sctx *ServiceContext) scrapeFeed(wg *sync.WaitGroup, feed Feed) {
 	}
 
 	rssFeed, err := sctx.UrlToFeed(feed.URL)
+	// sctx.Logger.Printf("%+v", rssFeed)
 	if err != nil {
 		sctx.Logger.Println("Error fetching feed:", err)
 		return
 	}
 
 	for _, item := range rssFeed.Channel.Item {
-		sctx.Logger.Println("Found post", item.Title)
+		description := sql.NullString{}
+		if item.Description != "" {
+			description.String = item.Description
+			description.Valid = true
+		}
+		pubdate, err := time.Parse(time.RFC1123Z, item.PubDate)
+		if err != nil {
+			sctx.Logger.Printf("Couldn't parse date %v with err %v", item.PubDate, err)
+			continue
+		}
+
+		post := Post{
+			ID:          uuid.New(),
+			CreatedAt:   time.Now().UTC(),
+			UpdatedAt:   time.Now().UTC(),
+			Title:       item.Title,
+			Description: description,
+			PublishedAt: pubdate,
+			Url:         item.Link,
+			FeedId:      feed.ID,
+		}
+
+		err = sctx.CreatePost(context.Background(), post)
+		if err != nil {
+			if strings.Contains(err.Error(), "duplicate key") {
+				continue
+			}
+			sctx.Logger.Println("Could not create post:", err)
+		}
 	}
 	sctx.Logger.Printf("Feed %s collected, %v posts found", feed.Name, len(rssFeed.Channel.Item))
 }

@@ -16,7 +16,7 @@ func GetFeeds(ctx context.Context, DBConn *sql.DB) ([]Feed, error) {
 
 	for rows.Next() {
 		feed := Feed{}
-		err := rows.Scan(&feed.ID, &feed.CreatedAt, &feed.UpdatedAt, &feed.Name, &feed.URL, &feed.UserID)
+		err := rows.Scan(&feed.ID, &feed.CreatedAt, &feed.UpdatedAt, &feed.Name, &feed.URL, &feed.UserID, &feed.LastFetchedAt)
 		if err != nil {
 			return feeds, fmt.Errorf("error getting feeds: %v", err)
 		}
