@@ -3,12 +3,24 @@ package services
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"github.com/google/uuid"
 )
 
-func GetPosts(ctx context.Context, DBConn *sql.DB, userID uuid.UUID, postsCount int) ([]Post, error) {
-	posts := []Post{}
+type PostWithNullDescriptionAllowed struct {
+	ID          uuid.UUID `json:"id,omitempty"  bson:"id"`
+	CreatedAt   time.Time `json:"created_at,omitempty"  bson:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at,omitempty"  bson:"updated_at"`
+	Title       string    `json:"title,omitempty"  bson:"title"`
+	Description *string   `json:"description,omitempty"  bson:"description"`
+	PublishedAt time.Time `json:"published_at,omitempty"  bson:"published_at"`
+	Url         string    `json:"url,omitempty"  bson:"url"`
+	FeedId      uuid.UUID `json:"feed_id,omitempty"  bson:"feed_id"`
+}
+
+func GetPosts(ctx context.Context, DBConn *sql.DB, userID uuid.UUID, postsCount int) ([]PostWithNullDescriptionAllowed, error) {
+	posts := []PostWithNullDescriptionAllowed{}
 	query := `
 	SELECT posts.* FROM posts
 	JOIN feed_follows 
@@ -28,7 +40,7 @@ func GetPosts(ctx context.Context, DBConn *sql.DB, userID uuid.UUID, postsCount 
 	}
 
 	for rows.Next() {
-		post := Post{}
+		post := PostWithNullDescriptionAllowed{}
 
 		err := rows.Scan(&post.ID, &post.CreatedAt, &post.UpdatedAt, &post.Title,
 			&post.Description, &post.PublishedAt, &post.Url, &post.FeedId)
