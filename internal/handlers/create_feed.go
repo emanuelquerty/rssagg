@@ -33,8 +33,8 @@ func (hctx *HandlerContext) CreateFeed(w http.ResponseWriter, r *http.Request, u
 		UserID:    user.ID,
 	})
 	if err != nil {
-		hctx.Logger.Println("Couldn't create user", err)
-		utils.RespondWithError(w, 500, fmt.Sprint("Couldn't create feed:", err))
+		hctx.Logger.Println("Couldn't create feed", err)
+		utils.RespondWithError(w, 400, "Couldn't create feed. url is already associated with an existing feed.")
 		return
 	}
 	utils.RespondWithJSON(w, 201, feed)
