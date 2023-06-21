@@ -36,7 +36,7 @@ This project uses the  goose package to manage database migrations. You need to 
 ```
     go install github.com/pressly/goose/v3/cmd/goose@latest
 ```
-**How to run goose to install all database schemas**
+**How to run goose to install all database schemas:**
 
 ```
     goose postgres "postgres://your_postgres_username:your_postgres_password@localhost:5432/**rssagg**?sslmode=disable" up
