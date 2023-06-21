@@ -1,4 +1,4 @@
-# Rss Feed Agregator API
+# Rss Feed Aggregator API
 
 This is a rest api that enables users to creat accounts and create rss feeds in their accounts.
 It also enables users to retrieve and delete their rss feeds. 
