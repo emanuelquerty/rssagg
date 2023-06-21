@@ -257,6 +257,8 @@ Since every rss feed contains one or more posts, a user can retrieve all posts f
         }
 ```
 
+**Example Response Body** 
+
 ```JSON
     [
         {
@@ -287,16 +289,6 @@ Since every rss feed contains one or more posts, a user can retrieve all posts f
             "description": "I found this proposal for improvements to error handling in Go interesting, but still not something I&rsquo;d be happy to see implemented.\nAllow me to clear up my thoughts on Go&rsquo;s errors. Overall, I prefer how Go forces me to think about errors at every turn. When working in try/catch languages like JavaScript, I often easily forget which functions can throw. Even if I do remember, it&rsquo;s easy to think &ldquo;I think this gets caught somewhere up the call chain&rdquo;.",
             "published_at": "2022-11-05T00:00:00Z",
             "url": "https://wagslane.dev/posts/guard-keyword-error-handling-golang/",
-            "feed_id": "c224fc5a-6506-4d5b-a67d-b20f9aa9de02"
-        },
-        {
-            "id": "b0616a60-f571-4aa9-bfb7-3ee1634cd03c",
-            "created_at": "2023-06-16T10:03:40.26284Z",
-            "updated_at": "2023-06-16T10:03:40.26284Z",
-            "title": "Devops: An Idea so Good, No One Admits They Don’t Do It",
-            "description": "The ideas behind the DevOps movements undeniably changed the software development world for the better - but by now, the term &ldquo;DevOps&rdquo; has lost all meaning.\nSometimes an idea is so good, that you can’t argue with it. I’m not saying that the original idea behind &ldquo;DevOps&rdquo; was perfect - I’ve written about some of the specific issues I&rsquo;ve seen. That said, I think there is enough data and research behind the core ideas by now that there are very few companies willing to admit they don’t &ldquo;do DevOps&rdquo;.",
-            "published_at": "2022-08-29T00:00:00Z",
-            "url": "https://wagslane.dev/posts/no-one-does-devops/",
             "feed_id": "c224fc5a-6506-4d5b-a67d-b20f9aa9de02"
         },
         .
