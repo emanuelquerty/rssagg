@@ -14,7 +14,7 @@ After downloading, create a **.env file** in the root directory and add a **PORT
 and **DB_URL** variable for the API to listen on and the postgress database configuration string
 for it to connect to your postgres database 
 
-### Example
+### Example .env file
 
 ```
     PORT= 8000
@@ -23,6 +23,24 @@ for it to connect to your postgres database
 
 **Notice the database name rssagg in the connection string must be exactly named rssagg since that's what's configured**
 **in the code unless you decide to change the name in internal/databade/config file**
+
+**Finally create a database in your postgres database system name rssagg**
+
+### Database Migrations
+
+This project uses the  goose package to manage database migrations. You need to install goose locally in your machine to run the migrations contained in 
+./internal/sql/schema so you can have all required tables with their schema in your postgres database created above
+
+**Goose installation:**
+
+```
+    go install github.com/pressly/goose/v3/cmd/goose@latest
+```
+**How to run goose to install all database schemas**
+
+```
+    goose postgres "postgres://your_postgres_username:your_postgres_password@localhost:5432/**rssagg**?sslmode=disable" up
+```
 
 ### How to run the aplication
 
