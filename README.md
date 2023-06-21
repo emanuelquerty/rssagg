@@ -16,8 +16,10 @@ for it to connect to your postgres database
 
 ### Example
 
-**PORT=** 8000
-**DB_URL=** postgres://your_postgres_username:your_postgres_password@localhost:5432/**rssagg**?sslmode=disable
+```
+    PORT= 8000
+    DB_URL= postgres://your_postgres_username:your_postgres_password@localhost:5432/**rssagg**?sslmode=disable
+```
 
 **Notice the database name rssagg in the connection string must be exactly named rssagg since that's what's configured**
 **in the code unless you decide to change the name in internal/databade/config file**
