@@ -23,8 +23,8 @@ type Feed struct {
 func CreateFeed(ctx context.Context, DBConn *sql.DB, feed Feed) (Feed, error) {
 	query := `
 	INSERT INTO 
-	feeds(id, created_at, updated_at, name, url, user_id) 
-	VALUES($1, $2, $3, $4, $5, $6) 
+	feeds(id, created_at, updated_at, name, url, user_id, last_fetched_at) 
+	VALUES($1, $2, $3, $4, $5, $6, $7) 
 	RETURNING *`
 
 	stmt, err := DBConn.PrepareContext(ctx, query)
@@ -33,13 +33,14 @@ func CreateFeed(ctx context.Context, DBConn *sql.DB, feed Feed) (Feed, error) {
 		return Feed{}, err
 	}
 	row := stmt.QueryRowContext(ctx, feed.ID, feed.CreatedAt,
-		feed.UpdatedAt, feed.Name, feed.URL, feed.UserID)
+		feed.UpdatedAt, feed.Name, feed.URL, feed.UserID, feed.LastFetchedAt)
 
 	newlyCreatedFeed := Feed{}
 
 	err = row.Scan(&newlyCreatedFeed.ID, &newlyCreatedFeed.CreatedAt,
 		&newlyCreatedFeed.UpdatedAt, &newlyCreatedFeed.Name,
-		&newlyCreatedFeed.URL, &newlyCreatedFeed.UserID)
+		&newlyCreatedFeed.URL, &newlyCreatedFeed.UserID,
+		&newlyCreatedFeed.LastFetchedAt)
 
 	if err != nil {
 		log.Printf("Could not created a new feed %v", err)

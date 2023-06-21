@@ -25,12 +25,13 @@ func (hctx *HandlerContext) CreateFeed(w http.ResponseWriter, r *http.Request, u
 	}
 
 	feed, err := services.CreateFeed(r.Context(), hctx.DBConn, services.Feed{
-		ID:        uuid.New(),
-		CreatedAt: time.Now().UTC(),
-		UpdatedAt: time.Now().UTC(),
-		Name:      params.Name,
-		URL:       params.URL,
-		UserID:    user.ID,
+		ID:            uuid.New(),
+		CreatedAt:     time.Now().UTC(),
+		UpdatedAt:     time.Now().UTC(),
+		Name:          params.Name,
+		URL:           params.URL,
+		UserID:        user.ID,
+		LastFetchedAt: time.Now().UTC(),
 	})
 	if err != nil {
 		hctx.Logger.Println("Couldn't create feed", err)
