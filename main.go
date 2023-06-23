@@ -14,6 +14,7 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/emanuelquerty/rssagg/internal/database"
+	"github.com/emanuelquerty/rssagg/internal/handlers"
 	"github.com/emanuelquerty/rssagg/internal/routers"
 	"github.com/emanuelquerty/rssagg/internal/services"
 )
@@ -49,10 +50,9 @@ func main() {
 		MaxAge:           300,
 	}))
 
-	v1Router := routers.NewRouter()
-	v1Router.DBConn = dbConn
-	v1Router.Logger = logger
-	router.Mount("/v1", v1Router.Route())
+	handlerCtx := handlers.NewHandlerContext(dbConn, logger)
+	routerCtx := routers.NewRouterContext(handlerCtx)
+	router.Mount("/v1", routerCtx.Route())
 
 	server := &http.Server{
 		Handler: router,

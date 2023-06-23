@@ -1,45 +1,40 @@
 package routers
 
 import (
-	"database/sql"
-	"log"
-
 	"github.com/emanuelquerty/rssagg/internal/handlers"
 	"github.com/go-chi/chi"
 )
 
-type v1Router struct {
-	router *chi.Mux
-	Logger *log.Logger
-	DBConn *sql.DB
+type RouterContext struct {
+	router     *chi.Mux
+	handlerCtx handlers.HandlerContext
 }
 
-func NewRouter() *v1Router {
-	vr := &v1Router{}
-	return vr
-}
-
-func (v1r *v1Router) Route() *chi.Mux {
-	v1r.router = chi.NewRouter()
-	handlerContext := handlers.HandlerContext{
-		DBConn: v1r.DBConn,
-		Logger: v1r.Logger,
+func NewRouterContext(handlerCtx handlers.HandlerContext) *RouterContext {
+	routerCtx := &RouterContext{
+		router:     chi.NewRouter(),
+		handlerCtx: handlerCtx,
 	}
+	return routerCtx
+}
 
-	v1r.router.Get("/healthz", handlers.HandleReadiness)
-	v1r.router.Get("/err", handlers.HandleError)
+func (rctx *RouterContext) Route() *chi.Mux {
+	hctx := rctx.handlerCtx
 
-	v1r.router.Post("/users", handlerContext.CreateUser)
-	v1r.router.Get("/users", handlerContext.MiddlewareAuth(handlerContext.GetUser))
+	rctx.router.Get("/healthz", handlers.HandleReadiness)
+	rctx.router.Get("/err", handlers.HandleError)
 
-	v1r.router.Post("/feeds", handlerContext.MiddlewareAuth(handlerContext.CreateFeed))
-	v1r.router.Get("/feeds", handlerContext.GetFeeds)
+	rctx.router.Post("/users", hctx.CreateUser)
+	rctx.router.Get("/users", hctx.MiddlewareAuth(hctx.GetUser))
 
-	v1r.router.Post("/feed_follows", handlerContext.MiddlewareAuth(handlerContext.CreateFeedFollows))
-	v1r.router.Get("/feed_follows", handlerContext.MiddlewareAuth(handlerContext.GetFeedFollows))
-	v1r.router.Delete("/feed_follows/{feedFollowID}", handlerContext.MiddlewareAuth(handlerContext.DeleteFeedFollows))
+	rctx.router.Post("/feeds", hctx.MiddlewareAuth(hctx.CreateFeed))
+	rctx.router.Get("/feeds", hctx.GetFeeds)
 
-	v1r.router.Get("/posts", handlerContext.MiddlewareAuth(handlerContext.GetPosts))
+	rctx.router.Post("/feed_follows", hctx.MiddlewareAuth(hctx.CreateFeedFollows))
+	rctx.router.Get("/feed_follows", hctx.MiddlewareAuth(hctx.GetFeedFollows))
+	rctx.router.Delete("/feed_follows/{feedFollowID}", hctx.MiddlewareAuth(hctx.DeleteFeedFollows))
 
-	return v1r.router
+	rctx.router.Get("/posts", hctx.MiddlewareAuth(hctx.GetPosts))
+
+	return rctx.router
 }
