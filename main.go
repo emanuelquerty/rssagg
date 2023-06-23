@@ -67,6 +67,10 @@ func main() {
 		}
 	}()
 
+	shutdownServerGracefully(server, logger)
+}
+
+func shutdownServerGracefully(server *http.Server, logger *log.Logger) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt)
 
