@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/emanuelquerty/rssagg/internal/responder"
 	"github.com/emanuelquerty/rssagg/internal/services"
-	"github.com/emanuelquerty/rssagg/internal/utils"
 	"github.com/google/uuid"
 )
 
@@ -19,7 +19,7 @@ func (hctx *HandlerContext) CreateUser(w http.ResponseWriter, r *http.Request) {
 	params := parameters{}
 	err := decoder.Decode(&params)
 	if err != nil {
-		utils.RespondWithError(w, 400, fmt.Sprint("Error parsing JSON:", err))
+		responder.RespondWithError(w, 400, fmt.Sprint("Error parsing JSON:", err))
 		return
 	}
 
@@ -31,8 +31,8 @@ func (hctx *HandlerContext) CreateUser(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		hctx.Logger.Println("Couldn't create user", err)
-		utils.RespondWithError(w, 500, fmt.Sprint("Couldn't create user:", err))
+		responder.RespondWithError(w, 500, fmt.Sprint("Couldn't create user:", err))
 		return
 	}
-	utils.RespondWithJSON(w, 201, user)
+	responder.RespondWithJSON(w, 201, user)
 }

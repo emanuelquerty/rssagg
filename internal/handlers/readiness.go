@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/emanuelquerty/rssagg/internal/utils"
+	"github.com/emanuelquerty/rssagg/internal/responder"
 )
 
 func HandleReadiness(w http.ResponseWriter, r *http.Request) {
-	utils.RespondWithJSON(w, 200, struct{}{})
+	responder.RespondWithJSON(w, 200, struct{}{})
 }

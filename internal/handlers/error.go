@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/emanuelquerty/rssagg/internal/utils"
+	"github.com/emanuelquerty/rssagg/internal/responder"
 )
 
 func HandleError(w http.ResponseWriter, r *http.Request) {
-	utils.RespondWithError(w, 400, "Something went wrong")
+	responder.RespondWithError(w, 400, "Something went wrong")
 }
